@@ -502,6 +502,127 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-cancel {
+            background: #e2e8f0;
+            color: var(--dark);
+        }
+        
+        .btn-save {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Login/Signup styles */
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .auth-left {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            color: white;
+        }
+        
+        .auth-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            background: white;
+        }
+        
+        .auth-form {
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .auth-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
         @media (max-width: 768px) {
             .header-container {
                 flex-direction: column;
@@ -516,275 +637,457 @@
             .section-title {
                 font-size: 1.3rem;
             }
+            
+            .auth-container {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
+    <!-- Login/Signup Screen (Initial View) -->
+    <div id="authScreen" class="auth-container">
+        <div class="auth-left">
             <div class="logo">
                 <i class="fas fa-arrow-trend-down"></i>
                 <span>PriceDrop Tracker</span>
             </div>
-            
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Search for products, brands, or categories...">
-                <button id="searchButton">
-                    <i class="fas fa-search"></i>
+            <h1 style="margin-top: 2rem; font-size: 2.5rem;">Reseller Intelligence Platform</h1>
+            <p style="margin-top: 1rem; font-size: 1.2rem; opacity: 0.9;">
+                Track prices across platforms, manage inventory, and maximize profits
+            </p>
+            <div style="margin-top: 3rem;">
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-check-circle" style="font-size: 1.5rem; margin-right: 10px;"></i>
+                    <div>Track price drops in real-time</div>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-check-circle" style="font-size: 1.5rem; margin-right: 10px;"></i>
+                    <div>Automate inventory management</div>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-check-circle" style="font-size: 1.5rem; margin-right: 10px;"></i>
+                    <div>Get alerts for profitable opportunities</div>
+                </div>
+            </div>
+        </div>
+        <div class="auth-right">
+            <div class="auth-form">
+                <h2 class="auth-title">Sign in to your account</h2>
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="login()">
+                    Sign in
                 </button>
+                <div class="auth-switch">
+                    Don't have an account? <a href="#" onclick="showSignup()">Sign up</a>
+                </div>
             </div>
             
-            <div class="user-actions">
-                <button class="btn btn-outline">
-                    <i class="fas fa-bell"></i>
+            <div id="signupForm" class="auth-form" style="display: none;">
+                <h2 class="auth-title">Create an account</h2>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signupName" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input type="email" id="signupEmail" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>Business Type</label>
+                    <select id="businessType">
+                        <option value="individual">Individual Reseller</option>
+                        <option value="small">Small Business</option>
+                        <option value="enterprise">Enterprise</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="signup()">
+                    Create Account
                 </button>
-                <button class="btn btn-primary">
-                    <i class="fas fa-user"></i>
-                    <span>Reseller Dashboard</span>
-                </button>
-            </div>
-        </div>
-    </header>
-    
-    <div class="container">
-        <div class="dashboard-stats">
-            <div class="stat-card">
-                <div class="stat-title">Active Trackers</div>
-                <div class="stat-value">142</div>
-                <div class="stat-change">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>12% this week</span>
+                <div class="auth-switch">
+                    Already have an account? <a href="#" onclick="showLogin()">Sign in</a>
                 </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-title">Potential Savings</div>
-                <div class="stat-value">$3,842</div>
-                <div class="stat-change">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>7% this month</span>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-title">Stock Value</div>
-                <div class="stat-value">$24,580</div>
-                <div class="stat-change negative">
-                    <i class="fas fa-arrow-down"></i>
-                    <span>2% this week</span>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-title">New Price Drops</div>
-                <div class="stat-value">27</div>
-                <div class="stat-change">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>Today</span>
-                </div>
-            </div>
-        </div>
-        
-        <h2 class="section-title">
-            <i class="fas fa-bolt"></i>
-            Hot Price Drops
-        </h2>
-        
-        <div class="tabs">
-            <div class="tab active">All Platforms</div>
-            <div class="tab">Electronics</div>
-            <div class="tab">Fashion</div>
-            <div class="tab">Home & Kitchen</div>
-        </div>
-        
-        <div class="products-grid" id="productsContainer">
-            <!-- Product cards will be generated by JavaScript -->
-        </div>
-        
-        <div class="chart-container">
-            <canvas id="priceTrendChart"></canvas>
-        </div>
-        
-        <div class="inventory-section">
-            <h2 class="section-title">
-                <i class="fas fa-boxes-stacked"></i>
-                Your Inventory
-            </h2>
-            
-            <div class="inventory-grid" id="inventoryContainer">
-                <!-- Inventory items will be generated by JavaScript -->
             </div>
         </div>
     </div>
     
-    <footer>
-        <div class="footer-container">
-            <div class="footer-col">
-                <h3>PriceDrop Tracker</h3>
-                <p>The ultimate tool for resellers to maximize profits by tracking price drops across all major shopping platforms.</p>
-                <div class="platform-logos">
-                    <div class="platform-logo">
-                        <i class="fab fa-amazon"></i>
+    <!-- Main Application (Hidden until login) -->
+    <div id="appContainer" style="display: none;">
+        <header>
+            <div class="header-container">
+                <div class="logo">
+                    <i class="fas fa-arrow-trend-down"></i>
+                    <span>PriceDrop Tracker</span>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search for products, brands, or categories...">
+                    <button id="searchButton">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="user-actions">
+                    <button class="btn btn-outline" id="notificationButton">
+                        <i class="fas fa-bell"></i>
+                        <span id="notificationCount">0</span>
+                    </button>
+                    <button class="btn btn-primary" id="userMenuButton">
+                        <i class="fas fa-user"></i>
+                        <span id="userName">Reseller</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="container">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-title">Active Trackers</div>
+                    <div class="stat-value" id="activeTrackers">0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="trackerChange">0% this week</span>
                     </div>
-                    <div class="platform-logo">
-                        <i class="fab fa-ebay"></i>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Potential Savings</div>
+                    <div class="stat-value" id="potentialSavings">$0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="savingsChange">0% this month</span>
                     </div>
-                    <div class="platform-logo">
-                        <i class="fab fa-shopify"></i>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Stock Value</div>
+                    <div class="stat-value" id="stockValue">$0</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i>
+                        <span id="stockChange">0% this week</span>
                     </div>
-                    <div class="platform-logo">
-                        <i class="fab fa-alipay"></i>
-                    </div>
-                    <div class="platform-logo">
-                        <i class="fab fa-walmart"></i>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">New Price Drops</div>
+                    <div class="stat-value" id="priceDrops">0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Today</span>
                     </div>
                 </div>
             </div>
             
-            <div class="footer-col">
-                <h3>Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Price Alerts</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Inventory Manager</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Profit Calculator</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Reseller Resources</a></li>
-                </ul>
+            <h2 class="section-title">
+                <i class="fas fa-bolt"></i>
+                Hot Price Drops
+            </h2>
+            
+            <div class="tabs">
+                <div class="tab active">All Platforms</div>
+                <div class="tab">Electronics</div>
+                <div class="tab">Fashion</div>
+                <div class="tab">Home & Kitchen</div>
+                <button class="btn btn-primary" style="margin-left: auto;" onclick="openAddProductModal()">
+                    <i class="fas fa-plus"></i> Add Product
+                </button>
             </div>
             
-            <div class="footer-col">
-                <h3>Supported Platforms</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-store"></i> Amazon</a></li>
-                    <li><a href="#"><i class="fas fa-gem"></i> eBay</a></li>
-                    <li><a href="#"><i class="fas fa-cart-shopping"></i> Walmart</a></li>
-                    <li><a href="#"><i class="fas fa-tag"></i> Target</a></li>
-                    <li><a href="#"><i class="fas fa-basket-shopping"></i> Best Buy</a></li>
-                    <li><a href="#"><i class="fas fa-tshirt"></i> AliExpress</a></li>
-                </ul>
+            <div class="products-grid" id="productsContainer">
+                <!-- Product cards will be generated by JavaScript -->
             </div>
             
-            <div class="footer-col">
-                <h3>Contact Us</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-envelope"></i> support@pricedrop.com</a></li>
-                    <li><a href="#"><i class="fab fa-discord"></i> Discord Community</a></li>
-                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
-                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook Group</a></li>
-                </ul>
+            <div class="chart-container">
+                <canvas id="priceTrendChart"></canvas>
+            </div>
+            
+            <div class="inventory-section">
+                <h2 class="section-title">
+                    <i class="fas fa-boxes-stacked"></i>
+                    Your Inventory
+                </h2>
+                
+                <div class="inventory-grid" id="inventoryContainer">
+                    <!-- Inventory items will be generated by JavaScript -->
+                </div>
             </div>
         </div>
-    </footer>
-
+        
+        <footer>
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>PriceDrop Tracker</h3>
+                    <p>The ultimate tool for resellers to maximize profits by tracking price drops across all major shopping platforms.</p>
+                    <div class="platform-logos">
+                        <div class="platform-logo">
+                            <i class="fab fa-amazon"></i>
+                        </div>
+                        <div class="platform-logo">
+                            <i class="fab fa-ebay"></i>
+                        </div>
+                        <div class="platform-logo">
+                            <i class="fab fa-shopify"></i>
+                        </div>
+                        <div class="platform-logo">
+                            <i class="fab fa-alipay"></i>
+                        </div>
+                        <div class="platform-logo">
+                            <i class="fab fa-walmart"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Price Alerts</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Inventory Manager</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Profit Calculator</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Reseller Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Supported Platforms</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-store"></i> Amazon</a></li>
+                        <li><a href="#"><i class="fas fa-gem"></i> eBay</a></li>
+                        <li><a href="#"><i class="fas fa-cart-shopping"></i> Walmart</a></li>
+                        <li><a href="#"><i class="fas fa-tag"></i> Target</a></li>
+                        <li><a href="#"><i class="fas fa-basket-shopping"></i> Best Buy</a></li>
+                        <li><a href="#"><i class="fas fa-tshirt"></i> AliExpress</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-envelope"></i> support@pricedrop.com</a></li>
+                        <li><a href="#"><i class="fab fa-discord"></i> Discord Community</a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fab fa-facebook"></i> Facebook Group</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addProductModal')">&times;</span>
+            <h2 class="modal-title">Track New Product</h2>
+            <div class="form-group">
+                <label>Product URL</label>
+                <input type="text" id="productUrl" placeholder="https://amazon.com/product/...">
+            </div>
+            <div class="form-group">
+                <label>Platform</label>
+                <select id="productPlatform">
+                    <option value="amazon">Amazon</option>
+                    <option value="ebay">eBay</option>
+                    <option value="walmart">Walmart</option>
+                    <option value="target">Target</option>
+                    <option value="bestbuy">Best Buy</option>
+                    <option value="aliexpress">AliExpress</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Target Price ($)</label>
+                <input type="number" id="targetPrice" placeholder="Enter your target price">
+            </div>
+            <div class="form-group">
+                <label>Desired Quantity</label>
+                <input type="number" id="desiredQuantity" placeholder="How many units?" value="1">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal('addProductModal')">Cancel</button>
+                <button class="btn btn-save" onclick="addNewProduct()">Start Tracking</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('notificationModal')">&times;</span>
+            <h2 class="modal-title">Price Drop Alerts</h2>
+            <div id="notificationList">
+                <!-- Notifications will be added here -->
+            </div>
+        </div>
+    </div>
+    
     <script>
-        // Sample product data
-        const products = [
-            {
-                id: 1,
-                title: "Wireless Bluetooth Headphones",
-                brand: "Sony",
-                currentPrice: 89.99,
-                originalPrice: 129.99,
-                discount: 31,
-                platform: "Amazon",
-                image: "headphones"
-            },
-            {
-                id: 2,
-                title: "Smart Fitness Watch Series 5",
-                brand: "FitBit",
-                currentPrice: 149.99,
-                originalPrice: 199.99,
-                discount: 25,
-                platform: "eBay",
-                image: "watch"
-            },
-            {
-                id: 3,
-                title: "4K Ultra HD Smart TV 55-inch",
-                brand: "Samsung",
-                currentPrice: 499.99,
-                originalPrice: 699.99,
-                discount: 29,
-                platform: "Best Buy",
-                image: "tv"
-            },
-            {
-                id: 4,
-                title: "Professional DSLR Camera",
-                brand: "Canon",
-                currentPrice: 799.99,
-                originalPrice: 999.99,
-                discount: 20,
-                platform: "Amazon",
-                image: "camera"
-            },
-            {
-                id: 5,
-                title: "Gaming Laptop 16GB RAM",
-                brand: "ASUS ROG",
-                currentPrice: 1299.99,
-                originalPrice: 1599.99,
-                discount: 19,
-                platform: "Walmart",
-                image: "laptop"
-            },
-            {
-                id: 6,
-                title: "Wireless Charging Station",
-                brand: "Anker",
-                currentPrice: 34.99,
-                originalPrice: 49.99,
-                discount: 30,
-                platform: "AliExpress",
-                image: "charger"
+        // User data and authentication
+        let currentUser = null;
+        let products = [];
+        let inventory = [];
+        let notifications = [];
+        
+        // DOM Elements
+        const authScreen = document.getElementById('authScreen');
+        const appContainer = document.getElementById('appContainer');
+        const signupForm = document.getElementById('signupForm');
+        const productsContainer = document.getElementById('productsContainer');
+        const inventoryContainer = document.getElementById('inventoryContainer');
+        const notificationList = document.getElementById('notificationList');
+        const notificationCount = document.getElementById('notificationCount');
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                loadUserData();
+                showApp();
+            } else {
+                authScreen.style.display = 'flex';
             }
-        ];
-
-        // Sample inventory data
-        const inventory = [
-            {
-                id: 101,
-                title: "Bluetooth Earbuds Pro",
-                brand: "Apple",
-                platform: "Amazon",
-                stock: 15,
-                sold: 8,
-                image: "earbuds"
-            },
-            {
-                id: 102,
-                title: "Smart Home Speaker",
-                brand: "Google",
-                platform: "Best Buy",
-                stock: 12,
-                sold: 5,
-                image: "speaker"
-            },
-            {
-                id: 103,
-                title: "Wireless Mechanical Keyboard",
-                brand: "Logitech",
-                platform: "Walmart",
-                stock: 20,
-                sold: 12,
-                image: "keyboard"
-            },
-            {
-                id: 104,
-                title: "Noise Cancelling Headphones",
-                brand: "Bose",
-                platform: "eBay",
-                stock: 8,
-                sold: 3,
-                image: "headphones2"
+        });
+        
+        // Auth functions
+        function showSignup() {
+            document.querySelector('.auth-form').style.display = 'none';
+            signupForm.style.display = 'block';
+        }
+        
+        function showLogin() {
+            signupForm.style.display = 'none';
+            document.querySelector('.auth-form').style.display = 'block';
+        }
+        
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple validation
+            if (!email || !password) {
+                alert('Please enter both email and password');
+                return;
             }
-        ];
-
-        // Generate product cards
+            
+            // In a real app, this would be an API call
+            const users = JSON.parse(localStorage.getItem('users') || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                loadUserData();
+                showApp();
+            } else {
+                alert('Invalid email or password');
+            }
+        }
+        
+        function signup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const businessType = document.getElementById('businessType').value;
+            
+            // Simple validation
+            if (!name || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('users') || [];
+            if (users.some(u => u.email === email)) {
+                alert('User with this email already exists');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: Date.now().toString(),
+                name,
+                email,
+                password,
+                businessType,
+                createdAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Initialize user data
+            localStorage.setItem(`products_${currentUser.id}`, JSON.stringify([]));
+            localStorage.setItem(`inventory_${currentUser.id}`, JSON.stringify([]));
+            localStorage.setItem(`notifications_${currentUser.id}`, JSON.stringify([]));
+            
+            loadUserData();
+            showApp();
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            authScreen.style.display = 'flex';
+            appContainer.style.display = 'none';
+        }
+        
+        function loadUserData() {
+            if (!currentUser) return;
+            
+            // Load products
+            products = JSON.parse(localStorage.getItem(`products_${currentUser.id}`)) || [];
+            
+            // Load inventory
+            inventory = JSON.parse(localStorage.getItem(`inventory_${currentUser.id}`)) || [];
+            
+            // Load notifications
+            notifications = JSON.parse(localStorage.getItem(`notifications_${currentUser.id}`)) || [];
+            
+            // Update UI
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('notificationCount').textContent = notifications.length;
+            
+            // Calculate stats
+            updateDashboardStats();
+            
+            // Render data
+            renderProducts();
+            renderInventory();
+            initChart();
+            
+            // Add event listeners
+            document.getElementById('searchButton').addEventListener('click', searchProducts);
+            document.getElementById('notificationButton').addEventListener('click', showNotifications);
+            document.getElementById('userMenuButton').addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    logout();
+                }
+            });
+        }
+        
+        function showApp() {
+            authScreen.style.display = 'none';
+            appContainer.style.display = 'block';
+        }
+        
+        // Product functions
         function renderProducts() {
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = '';
+            productsContainer.innerHTML = '';
             
             products.forEach(product => {
                 const card = document.createElement('div');
@@ -792,12 +1095,9 @@
                 
                 // Determine icon based on product type
                 let icon = 'fa-box';
-                if (product.image === 'headphones') icon = 'fa-headphones';
-                if (product.image === 'watch') icon = 'fa-clock';
-                if (product.image === 'tv') icon = 'fa-tv';
-                if (product.image === 'camera') icon = 'fa-camera';
-                if (product.image === 'laptop') icon = 'fa-laptop';
-                if (product.image === 'charger') icon = 'fa-bolt';
+                if (product.category === 'electronics') icon = 'fa-headphones';
+                if (product.category === 'fashion') icon = 'fa-tshirt';
+                if (product.category === 'home') icon = 'fa-house';
                 
                 card.innerHTML = `
                     <div class="product-image">
@@ -815,35 +1115,209 @@
                             <i class="fas fa-store"></i> ${product.platform}
                         </div>
                         <div class="actions">
-                            <button class="btn-icon btn-stock" onclick="addToStock(${product.id})">
+                            <button class="btn-icon btn-stock" onclick="addToStock('${product.id}')">
                                 <i class="fas fa-cart-plus"></i> Stock
                             </button>
-                            <button class="btn-icon btn-track" onclick="trackProduct(${product.id})">
+                            <button class="btn-icon btn-track" onclick="trackProduct('${product.id}')">
                                 <i class="fas fa-bell"></i> Track
                             </button>
                         </div>
                     </div>
                 `;
                 
-                container.appendChild(card);
+                productsContainer.appendChild(card);
             });
         }
-
-        // Generate inventory items
+        
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!searchTerm) {
+                renderProducts();
+                return;
+            }
+            
+            const filteredProducts = products.filter(product => 
+                product.title.toLowerCase().includes(searchTerm) ||
+                product.brand.toLowerCase().includes(searchTerm) ||
+                product.category.toLowerCase().includes(searchTerm)
+            );
+            
+            productsContainer.innerHTML = '';
+            
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                let icon = 'fa-box';
+                if (product.category === 'electronics') icon = 'fa-headphones';
+                if (product.category === 'fashion') icon = 'fa-tshirt';
+                if (product.category === 'home') icon = 'fa-house';
+                
+                card.innerHTML = `
+                    <div class="product-image">
+                        <i class="fas ${icon} fa-4x" style="color: #3f37c9;"></i>
+                        <div class="discount-badge">${product.discount}% OFF</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">${product.brand}</div>
+                        <div class="product-title">${product.title}</div>
+                        <div class="price-container">
+                            <div class="current-price">$${product.currentPrice.toFixed(2)}</div>
+                            <div class="original-price">$${product.originalPrice.toFixed(2)}</div>
+                        </div>
+                        <div class="platform-tag">
+                            <i class="fas fa-store"></i> ${product.platform}
+                        </div>
+                        <div class="actions">
+                            <button class="btn-icon btn-stock" onclick="addToStock('${product.id}')">
+                                <i class="fas fa-cart-plus"></i> Stock
+                            </button>
+                            <button class="btn-icon btn-track" onclick="trackProduct('${product.id}')">
+                                <i class="fas fa-bell"></i> Track
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                productsContainer.appendChild(card);
+            });
+        }
+        
+        function openAddProductModal() {
+            document.getElementById('addProductModal').style.display = 'flex';
+        }
+        
+        function addNewProduct() {
+            const platform = document.getElementById('productPlatform').value;
+            const targetPrice = parseFloat(document.getElementById('targetPrice').value);
+            const quantity = parseInt(document.getElementById('desiredQuantity').value) || 1;
+            
+            if (!targetPrice || isNaN(targetPrice)) {
+                alert('Please enter a valid target price');
+                return;
+            }
+            
+            // In a real app, this would scrape the product URL
+            // For now, we'll generate mock data
+            const mockProducts = [
+                {
+                    id: `prod_${Date.now()}`,
+                    title: "Wireless Bluetooth Headphones",
+                    brand: "Sony",
+                    currentPrice: 89.99,
+                    originalPrice: 129.99,
+                    discount: 31,
+                    platform: "Amazon",
+                    category: "electronics",
+                    url: "https://amazon.com/sony-headphones"
+                },
+                {
+                    id: `prod_${Date.now() + 1}`,
+                    title: "Smart Fitness Watch",
+                    brand: "FitBit",
+                    currentPrice: 149.99,
+                    originalPrice: 199.99,
+                    discount: 25,
+                    platform: "eBay",
+                    category: "electronics",
+                    url: "https://ebay.com/fitbit-watch"
+                },
+                {
+                    id: `prod_${Date.now() + 2}`,
+                    title: "Designer Handbag",
+                    brand: "Michael Kors",
+                    currentPrice: 129.99,
+                    originalPrice: 199.99,
+                    discount: 35,
+                    platform: "Target",
+                    category: "fashion",
+                    url: "https://target.com/mk-handbag"
+                }
+            ];
+            
+            const newProduct = mockProducts[Math.floor(Math.random() * mockProducts.length)];
+            newProduct.targetPrice = targetPrice;
+            newProduct.desiredQuantity = quantity;
+            
+            products.push(newProduct);
+            localStorage.setItem(`products_${currentUser.id}`, JSON.stringify(products));
+            
+            // Add notification
+            addNotification(`Started tracking ${newProduct.title} on ${newProduct.platform}`);
+            
+            closeModal('addProductModal');
+            renderProducts();
+            updateDashboardStats();
+        }
+        
+        function addToStock(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Check if already in inventory
+            const existingItem = inventory.find(i => i.productId === productId);
+            
+            if (existingItem) {
+                existingItem.stock += 1;
+            } else {
+                inventory.push({
+                    id: `inv_${Date.now()}`,
+                    productId,
+                    title: product.title,
+                    brand: product.brand,
+                    platform: product.platform,
+                    purchasePrice: product.currentPrice,
+                    stock: 1,
+                    sold: 0,
+                    category: product.category
+                });
+            }
+            
+            localStorage.setItem(`inventory_${currentUser.id}`, JSON.stringify(inventory));
+            
+            // Add notification
+            addNotification(`Added ${product.title} to your inventory`);
+            
+            renderInventory();
+            updateDashboardStats();
+        }
+        
+        function trackProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Simulate price drop
+            setTimeout(() => {
+                const newPrice = product.currentPrice * 0.9; // 10% drop
+                const priceDrop = product.currentPrice - newPrice;
+                
+                product.currentPrice = parseFloat(newPrice.toFixed(2));
+                product.discount = Math.round((1 - (newPrice / product.originalPrice)) * 100);
+                
+                localStorage.setItem(`products_${currentUser.id}`, JSON.stringify(products));
+                
+                // Add notification
+                addNotification(`Price drop! ${product.title} now $${newPrice.toFixed(2)} ($${priceDrop.toFixed(2)} savings)`);
+                
+                renderProducts();
+                updateDashboardStats();
+            }, 5000);
+            
+            alert(`Tracking price for ${product.title}. You'll receive alerts when the price drops!`);
+        }
+        
+        // Inventory functions
         function renderInventory() {
-            const container = document.getElementById('inventoryContainer');
-            container.innerHTML = '';
+            inventoryContainer.innerHTML = '';
             
             inventory.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'inventory-card';
                 
-                // Determine icon based on product type
                 let icon = 'fa-box';
-                if (item.image === 'earbuds') icon = 'fa-earbuds';
-                if (item.image === 'speaker') icon = 'fa-volume-high';
-                if (item.image === 'keyboard') icon = 'fa-keyboard';
-                if (item.image === 'headphones2') icon = 'fa-headphones';
+                if (item.category === 'electronics') icon = 'fa-headphones';
+                if (item.category === 'fashion') icon = 'fa-tshirt';
+                if (item.category === 'home') icon = 'fa-house';
                 
                 const total = item.stock + item.sold;
                 const progress = (item.sold / total) * 100;
@@ -868,20 +1342,97 @@
                     </div>
                 `;
                 
-                container.appendChild(card);
+                inventoryContainer.appendChild(card);
             });
         }
-
-        // Initialize price trend chart
+        
+        // Notification functions
+        function addNotification(message) {
+            const newNotification = {
+                id: `notif_${Date.now()}`,
+                message,
+                date: new Date().toISOString(),
+                read: false
+            };
+            
+            notifications.unshift(newNotification);
+            localStorage.setItem(`notifications_${currentUser.id}`, JSON.stringify(notifications));
+            
+            notificationCount.textContent = notifications.length;
+        }
+        
+        function showNotifications() {
+            notificationList.innerHTML = '';
+            
+            if (notifications.length === 0) {
+                notificationList.innerHTML = '<p>No notifications yet. Track products to receive alerts!</p>';
+            } else {
+                notifications.forEach(notif => {
+                    const notifElement = document.createElement('div');
+                    notifElement.className = 'notification-item';
+                    notifElement.style.padding = '10px';
+                    notifElement.style.borderBottom = '1px solid #eee';
+                    
+                    const date = new Date(notif.date);
+                    const timeString = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    notifElement.innerHTML = `
+                        <div style="font-weight: 600; margin-bottom: 5px;">${notif.message}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">${timeString}</div>
+                    `;
+                    
+                    notificationList.appendChild(notifElement);
+                });
+            }
+            
+            // Mark all as read
+            notifications.forEach(notif => notif.read = true);
+            localStorage.setItem(`notifications_${currentUser.id}`, JSON.stringify(notifications));
+            notificationCount.textContent = '0';
+            
+            document.getElementById('notificationModal').style.display = 'flex';
+        }
+        
+        // Dashboard functions
+        function updateDashboardStats() {
+            // Active trackers
+            document.getElementById('activeTrackers').textContent = products.length;
+            document.getElementById('trackerChange').textContent = `${Math.min(products.length * 5, 100)}% this week`;
+            
+            // Potential savings
+            const savings = products.reduce((total, product) => {
+                return total + (product.originalPrice - product.currentPrice);
+            }, 0);
+            
+            document.getElementById('potentialSavings').textContent = `$${savings.toFixed(2)}`;
+            document.getElementById('savingsChange').textContent = `${Math.min(Math.round(savings / 10), 25)}% this month`;
+            
+            // Stock value
+            const stockValue = inventory.reduce((total, item) => {
+                return total + (item.stock * item.purchasePrice);
+            }, 0);
+            
+            document.getElementById('stockValue').textContent = `$${stockValue.toFixed(2)}`;
+            document.getElementById('stockChange').textContent = `${Math.max(-5, -Math.round(stockValue / 100))}% this week`;
+            
+            // Price drops
+            const priceDrops = products.filter(p => p.currentPrice < p.originalPrice).length;
+            document.getElementById('priceDrops').textContent = priceDrops;
+        }
+        
         function initChart() {
             const ctx = document.getElementById('priceTrendChart').getContext('2d');
-            const chart = new Chart(ctx, {
+            if (window.priceChart) {
+                window.priceChart.destroy();
+            }
+            
+            window.priceChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
                     datasets: [
                         {
-                            label: 'Sony Headphones',
+                            label: 'Average Price Drop',
                             data: [129, 125, 119, 115, 109, 105, 89],
                             borderColor: '#4361ee',
                             backgroundColor: 'rgba(67, 97, 238, 0.1)',
@@ -889,12 +1440,12 @@
                             fill: true
                         },
                         {
-                            label: 'Samsung TV',
-                            data: [699, 649, 599, 569, 549, 519, 499],
-                            borderColor: '#f72585',
-                            backgroundColor: 'rgba(247, 37, 133, 0.1)',
+                            label: 'Your Target Price',
+                            data: [100, 100, 100, 100, 100, 100, 100],
+                            borderColor: '#4cc9f0',
+                            borderDash: [5, 5],
                             tension: 0.3,
-                            fill: true
+                            fill: false
                         }
                     ]
                 },
@@ -938,49 +1489,79 @@
                 }
             });
         }
-
-        // Simulate adding to stock
-        function addToStock(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                alert(`Added ${product.brand} ${product.title} to your stock!`);
-                // In a real app, this would make an API call to your backend
+        
+        // Utility functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Initialize mock data for new users
+        function initializeMockData() {
+            if (!products.length) {
+                products = [
+                    {
+                        id: 'prod_1',
+                        title: "Wireless Bluetooth Headphones",
+                        brand: "Sony",
+                        currentPrice: 89.99,
+                        originalPrice: 129.99,
+                        discount: 31,
+                        platform: "Amazon",
+                        category: "electronics",
+                        targetPrice: 80.00,
+                        desiredQuantity: 5
+                    },
+                    {
+                        id: 'prod_2',
+                        title: "Smart Fitness Watch Series 5",
+                        brand: "FitBit",
+                        currentPrice: 149.99,
+                        originalPrice: 199.99,
+                        discount: 25,
+                        platform: "eBay",
+                        category: "electronics",
+                        targetPrice: 130.00,
+                        desiredQuantity: 3
+                    }
+                ];
+                localStorage.setItem(`products_${currentUser.id}`, JSON.stringify(products));
+            }
+            
+            if (!inventory.length) {
+                inventory = [
+                    {
+                        id: 'inv_1',
+                        productId: 'prod_1',
+                        title: "Wireless Bluetooth Headphones",
+                        brand: "Sony",
+                        platform: "Amazon",
+                        purchasePrice: 92.50,
+                        stock: 3,
+                        sold: 2,
+                        category: "electronics"
+                    }
+                ];
+                localStorage.setItem(`inventory_${currentUser.id}`, JSON.stringify(inventory));
+            }
+            
+            if (!notifications.length) {
+                notifications = [
+                    {
+                        id: 'notif_1',
+                        message: "Price drop! Sony Headphones now $89.99 ($10 savings)",
+                        date: new Date(Date.now() - 3600000).toISOString(),
+                        read: true
+                    },
+                    {
+                        id: 'notif_2',
+                        message: "Added Sony Headphones to your inventory",
+                        date: new Date(Date.now() - 7200000).toISOString(),
+                        read: true
+                    }
+                ];
+                localStorage.setItem(`notifications_${currentUser.id}`, JSON.stringify(notifications));
             }
         }
-
-        // Simulate tracking a product
-        function trackProduct(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                alert(`Tracking price for ${product.brand} ${product.title}! You'll get alerts when the price drops.`);
-                // In a real app, this would set up notifications
-            }
-        }
-
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', () => {
-            renderProducts();
-            renderInventory();
-            initChart();
-            
-            // Search functionality
-            document.getElementById('searchButton').addEventListener('click', () => {
-                const searchTerm = document.getElementById('searchInput').value;
-                if (searchTerm) {
-                    alert(`Searching for: "${searchTerm}"`);
-                    // In a real app, this would filter products
-                }
-            });
-            
-            // Tab switching
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    // In a real app, this would filter products by category
-                });
-            });
-        });
     </script>
 </body>
 </html>
